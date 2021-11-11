@@ -1,0 +1,25 @@
+name: Run test
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Build k6 binary
+        run: >
+          curl -X POST https://builder.k6.io/bundle -H 'Content-Type: application/json' -d @k6.json
+      - name: Get k6 binary 
+        run: >
+          r=$(curl -X POST https://builder.k6.io/bundle -H 'Content-Type: application/json' -d @k6.json); 
+          wget https://builder.k6.io/downloads/$(echo $r | jq -r ".id")/$(echo $r | jq -r ".name");
+          chmod +x k6_*
+      - name: Run k6
+        run: ./k6_* run example.js

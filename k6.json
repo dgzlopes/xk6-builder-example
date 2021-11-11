@@ -1,0 +1,12 @@
+{
+	"platform": {
+		"os": "linux",
+		"arch": "amd64"
+	},
+	"k6Version": "v0.34.0",
+	"extensions": [
+		{
+			"module_path": "github.com/dgzlopes/xk6-exec"
+		}
+	]
+}
